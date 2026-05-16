@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Banca São Cristóvão</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --navy: #0a1628;
+      --navy-mid: #112240;
+      --navy-light: #1a3358;
+      --gold: #c9a84c;
+      --gold-light: #e8c97a;
+      --white: #f0f4f8;
+      --muted: #8899aa;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background-color: var(--navy);
+      color: var(--white);
+      font-family: 'DM Sans', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 0 0 60px 0;
+      overflow-x: hidden;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 420px;
+      padding: 0 20px;
+      animation: fadeUp 0.8s ease both;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* HEADER */
+    .header {
+      text-align: center;
+      padding: 52px 0 32px;
+      position: relative;
+    }
+
+    .logo-ring {
+      width: 90px;
+      height: 90px;
+      border-radius: 50%;
+      border: 2px solid var(--gold);
+      margin: 0 auto 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--navy-mid);
+      position: relative;
+      box-shadow: 0 0 32px rgba(201,168,76,0.18);
+    }
+
+    .logo-ring::before {
+      content: '';
+      position: absolute;
+      inset: -5px;
+      border-radius: 50%;
+      border: 1px solid rgba(201,168,76,0.2);
+    }
+
+    .logo-icon {
+      font-size: 36px;
+      line-height: 1;
+    }
+
+    .badge {
+      display: inline-block;
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--gold);
+      border: 1px solid rgba(201,168,76,0.35);
+      padding: 4px 12px;
+      border-radius: 20px;
+      margin-bottom: 14px;
+    }
+
+    .title {
+      font-family: 'Playfair Display', serif;
+      font-size: 28px;
+      font-weight: 900;
+      line-height: 1.15;
+      color: var(--white);
+      letter-spacing: -0.01em;
+    }
+
+    .subtitle {
+      margin-top: 8px;
+      font-size: 13px;
+      color: var(--muted);
+      font-weight: 300;
+      letter-spacing: 0.04em;
+    }
+
+    .divider {
+      width: 40px;
+      height: 2px;
+      background: linear-gradient(90deg, var(--gold), transparent);
+      margin: 20px auto 0;
+    }
+
+    /* HORÁRIO */
+    .hours-card {
+      background: var(--navy-mid);
+      border: 1px solid rgba(201,168,76,0.2);
+      border-radius: 16px;
+      padding: 22px 24px;
+      margin-bottom: 14px;
+      position: relative;
+      overflow: hidden;
+      animation: fadeUp 0.8s 0.1s ease both;
+    }
+
+    .hours-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 3px; height: 100%;
+      background: linear-gradient(180deg, var(--gold), transparent);
+    }
+
+    .hours-card::after {
+      content: '🕗';
+      position: absolute;
+      right: 20px; top: 50%;
+      transform: translateY(-50%);
+      font-size: 28px;
+      opacity: 0.15;
+    }
+
+    .card-label {
+      font-size: 10px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--gold);
+      font-weight: 500;
+      margin-bottom: 8px;
+    }
+
+    .hours-main {
+      font-family: 'Playfair Display', serif;
+      font-size: 26px;
+      font-weight: 700;
+      color: var(--white);
+      line-height: 1;
+    }
+
+    .hours-sub {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 6px;
+      font-weight: 300;
+    }
+
+    /* STATUS AO VIVO */
+    .status-row {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      margin-top: 12px;
+    }
+
+    .status-dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: #4ade80;
+      box-shadow: 0 0 8px #4ade80;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.4; }
+    }
+
+    .status-text {
+      font-size: 12px;
+      color: #4ade80;
+      font-weight: 500;
+    }
+
+    /* BOTÕES */
+    .btn {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      width: 100%;
+      padding: 18px 22px;
+      border-radius: 14px;
+      text-decoration: none;
+      color: var(--white);
+      font-size: 14px;
+      font-weight: 500;
+      margin-bottom: 12px;
+      transition: transform 0.18s ease, box-shadow 0.18s ease;
+      position: relative;
+      overflow: hidden;
+      animation: fadeUp 0.8s 0.2s ease both;
+    }
+
+    .btn:active {
+      transform: scale(0.97);
+    }
+
+    .btn-whatsapp {
+      background: linear-gradient(135deg, #075e54, #128c7e);
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .btn-maps {
+      background: linear-gradient(135deg, var(--navy-light), #1e4080);
+      border: 1px solid rgba(201,168,76,0.2);
+    }
+
+    .btn-icon {
+      font-size: 22px;
+      flex-shrink: 0;
+    }
+
+    .btn-text {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .btn-title {
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    .btn-desc {
+      font-size: 11px;
+      color: rgba(255,255,255,0.5);
+      margin-top: 2px;
+    }
+
+    .btn-arrow {
+      margin-left: auto;
+      color: rgba(255,255,255,0.3);
+      font-size: 18px;
+    }
+
+    /* NOVIDADES */
+    .section-title {
+      font-size: 10px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--gold);
+      font-weight: 500;
+      margin: 28px 0 14px;
+      animation: fadeUp 0.8s 0.3s ease both;
+    }
+
+    .news-card {
+      background: var(--navy-mid);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 14px;
+      padding: 18px 20px;
+      margin-bottom: 10px;
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+      animation: fadeUp 0.8s 0.35s ease both;
+      transition: border-color 0.2s;
+    }
+
+    .news-card:hover {
+      border-color: rgba(201,168,76,0.25);
+    }
+
+    .news-emoji {
+      font-size: 26px;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .news-body {}
+
+    .news-tag {
+      font-size: 9px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--gold);
+      font-weight: 500;
+      margin-bottom: 4px;
+    }
+
+    .news-headline {
+      font-family: 'Playfair Display', serif;
+      font-size: 15px;
+      font-weight: 700;
+      line-height: 1.3;
+      color: var(--white);
+    }
+
+    .news-desc {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 4px;
+      line-height: 1.5;
+      font-weight: 300;
+    }
+
+    /* ENDEREÇO */
+    .address-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 16px 0;
+      border-top: 1px solid rgba(255,255,255,0.06);
+      margin-top: 24px;
+      animation: fadeUp 0.8s 0.5s ease both;
+    }
+
+    .address-icon {
+      font-size: 20px;
+      flex-shrink: 0;
+    }
+
+    .address-text {
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    /* FOOTER */
+    .footer {
+      text-align: center;
+      padding-top: 8px;
+      font-size: 10px;
+      color: rgba(255,255,255,0.15);
+      letter-spacing: 0.08em;
+      animation: fadeUp 0.8s 0.6s ease both;
+    }
+
+    .footer span {
+      color: var(--gold);
+      opacity: 0.5;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+
+    <!-- HEADER -->
+    <div class="header">
+      <div class="logo-ring">
+        <span class="logo-icon">📰</span>
+      </div>
+      <div class="badge">Desde 1978 · Teresina, PI</div>
+      <h1 class="title">Banca São Cristóvão</h1>
+      <p class="subtitle">A banca mais tradicional de Teresina</p>
+      <div class="divider"></div>
+    </div>
+
+    <!-- HORÁRIO -->
+    <div class="hours-card">
+      <div class="card-label">Horário de funcionamento</div>
+      <div class="hours-main">08h — 21h</div>
+      <div class="hours-sub">Segunda a domingo, todos os dias</div>
+      <div class="status-row">
+        <div class="status-dot"></div>
+        <span class="status-text">Aberto agora</span>
+      </div>
+    </div>
+
+    <!-- BOTÕES -->
+    <a href="https://wa.me/5586994089279" class="btn btn-whatsapp">
+      <span class="btn-icon">💬</span>
+      <span class="btn-text">
+        <span class="btn-title">Falar no WhatsApp</span>
+        <span class="btn-desc">(86) 99408-9279</span>
+      </span>
+      <span class="btn-arrow">›</span>
+    </a>
+
+    <a href="https://maps.app.goo.gl/umHr7qjmtyHvCj629" class="btn btn-maps">
+      <span class="btn-icon">📍</span>
+      <span class="btn-text">
+        <span class="btn-title">Como chegar</span>
+        <span class="btn-desc">Ver no Google Maps</span>
+      </span>
+      <span class="btn-arrow">›</span>
+    </a>
+
+    <!-- NOVIDADES -->
+    <div class="section-title">✦ Últimas novidades</div>
+
+    <div class="news-card">
+      <span class="news-emoji">🏆</span>
+      <div class="news-body">
+        <div class="news-tag">Em destaque</div>
+        <div class="news-headline">Álbum da Copa do Mundo 2026</div>
+        <div class="news-desc">Figurinhas Panini disponíveis! Envelopes avulsos e kits. Venha completar o seu álbum.</div>
+      </div>
+    </div>
+
+    <div class="news-card">
+      <span class="news-emoji">📰</span>
+      <div class="news-body">
+        <div class="news-tag">Sempre fresquinho</div>
+        <div class="news-headline">Revistas e Jornais do dia</div>
+        <div class="news-desc">As principais publicações do Brasil todos os dias cedo pela manhã.</div>
+      </div>
+    </div>
+
+    <div class="news-card">
+      <span class="news-emoji">🍬</span>
+      <div class="news-body">
+        <div class="news-tag">Bomboniere</div>
+        <div class="news-headline">Doces, balas e chocolates</div>
+        <div class="news-desc">Variedade completa de bomboniere para adoçar o seu dia.</div>
+      </div>
+    </div>
+
+    <!-- ENDEREÇO -->
+    <div class="address-row">
+      <span class="address-icon">🗺️</span>
+      <span class="address-text">Av. Homero Castelo Branco<br>Teresina, Piauí — CEP 64048-385</span>
+    </div>
+
+    <!-- FOOTER -->
+    <div class="footer">
+      <span>Banca São Cristóvão</span> · +46 anos de cultura
+    </div>
+
+  </div>
+</body>
+</html>
