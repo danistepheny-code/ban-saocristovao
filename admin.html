@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Painel — Banca São Cristóvão</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --navy: #0a1628;
+      --navy-mid: #112240;
+      --navy-light: #1a3358;
+      --gold: #c9a84c;
+      --white: #f0f4f8;
+      --muted: #8899aa;
+      --danger: #f87171;
+      --success: #4ade80;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: var(--navy);
+      color: var(--white);
+      font-family: 'DM Sans', sans-serif;
+      min-height: 100vh;
+      padding-bottom: 60px;
+    }
+    .top-bar {
+      background: var(--navy-mid);
+      border-bottom: 1px solid rgba(201,168,76,0.15);
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .top-bar-left { display: flex; align-items: center; gap: 10px; }
+    .top-logo { font-size: 22px; }
+    .top-name { font-family: 'Playfair Display', serif; font-size: 16px; font-weight: 700; }
+    .top-sub { font-size: 10px; color: var(--gold); letter-spacing: 0.1em; text-transform: uppercase; }
+    .view-btn {
+      font-size: 11px; color: var(--gold);
+      border: 1px solid rgba(201,168,76,0.3);
+      padding: 6px 14px; border-radius: 20px;
+      text-decoration: none; font-weight: 500;
+    }
+    .container { max-width: 480px; margin: 0 auto; padding: 24px 20px; }
+    .form-card {
+      background: var(--navy-mid);
+      border: 1px solid rgba(201,168,76,0.15);
+      border-radius: 18px;
+      padding: 24px;
+      margin-bottom: 28px;
+    }
+    .form-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 18px; font-weight: 700;
+      margin-bottom: 20px;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .form-title span { color: var(--gold); font-size: 20px; }
+    .field { margin-bottom: 16px; }
+    label {
+      display: block;
+      font-size: 11px; letter-spacing: 0.1em;
+      text-transform: uppercase; color: var(--muted);
+      margin-bottom: 7px; font-weight: 500;
+    }
+    input, textarea {
+      width: 100%;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 10px;
+      color: var(--white);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      padding: 12px 14px;
+      outline: none;
+      transition: border-color 0.2s;
+      -webkit-appearance: none;
+    }
+    input:focus, textarea:focus { border-color: var(--gold); }
+    textarea { resize: vertical; min-height: 80px; }
+    .img-preview {
+      margin-top: 10px;
+      border-radius: 12px;
+      overflow: hidden;
+      display: none;
+      border: 1px solid rgba(201,168,76,0.2);
+    }
+    .img-preview img {
+      width: 100%; max-height: 200px;
+      object-fit: cover; display: block;
+    }
+    .img-hint {
+      font-size: 11px; color: var(--muted);
+      margin-top: 6px; line-height: 1.5;
+    }
+    .emoji-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 4px; }
+    .emoji-btn {
+      width: 42px; height: 42px;
+      border-radius: 10px;
+      border: 1px solid rgba(255,255,255,0.1);
+      background: rgba(255,255,255,0.05);
+      font-size: 20px; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: all 0.15s;
+    }
+    .emoji-btn.selected {
+      border-color: var(--gold);
+      background: rgba(201,168,76,0.15);
+    }
+    .save-btn {
+      width: 100%; padding: 16px;
+      background: linear-gradient(135deg, var(--gold), #a07830);
+      color: #0a1628;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 15px; font-weight: 600;
+      border: none; border-radius: 12px;
+      cursor: pointer; letter-spacing: 0.04em;
+      transition: opacity 0.2s; margin-top: 4px;
+    }
+    .save-btn:active { opacity: 0.85; }
+    .toast {
+      position: fixed; bottom: 24px; left: 50%;
+      transform: translateX(-50%) translateY(80px);
+      background: var(--success); color: #0a1628;
+      font-size: 13px; font-weight: 600;
+      padding: 12px 24px; border-radius: 30px;
+      transition: transform 0.3s ease; z-index: 999;
+      white-space: nowrap;
+    }
+    .toast.show { transform: translateX(-50%) translateY(0); }
+    .section-label {
+      font-size: 10px; letter-spacing: 0.18em;
+      text-transform: uppercase; color: var(--gold);
+      font-weight: 500; margin-bottom: 14px;
+    }
+    .news-item {
+      background: var(--navy-mid);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 14px;
+      margin-bottom: 10px; overflow: hidden;
+      animation: fadeUp 0.3s ease both;
+    }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .news-item-img {
+      width: 100%; max-height: 160px;
+      object-fit: cover; display: block;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+    .news-item-body {
+      padding: 14px 16px;
+      display: flex; gap: 12px; align-items: flex-start;
+    }
+    .item-emoji { font-size: 22px; flex-shrink: 0; }
+    .item-info { flex: 1; }
+    .item-tag {
+      font-size: 9px; letter-spacing: 0.1em;
+      text-transform: uppercase; color: var(--gold); margin-bottom: 3px;
+    }
+    .item-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 14px; font-weight: 700; line-height: 1.3;
+    }
+    .item-desc { font-size: 11px; color: var(--muted); margin-top: 3px; line-height: 1.4; }
+    .item-actions { display: flex; gap: 6px; flex-shrink: 0; }
+    .del-btn {
+      width: 32px; height: 32px; border-radius: 8px;
+      border: 1px solid rgba(248,113,113,0.3);
+      background: rgba(248,113,113,0.08);
+      color: var(--danger); font-size: 14px;
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+    }
+    .up-btn, .down-btn {
+      width: 32px; height: 32px; border-radius: 8px;
+      border: 1px solid rgba(255,255,255,0.1);
+      background: rgba(255,255,255,0.04);
+      color: var(--muted); font-size: 14px;
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+    }
+    .empty { text-align: center; color: var(--muted); font-size: 13px; padding: 24px 0; }
+  </style>
+</head>
+<body>
+
+  <div class="top-bar">
+    <div class="top-bar-left">
+      <span class="top-logo">📰</span>
+      <div>
+        <div class="top-name">Banca São Cristóvão</div>
+        <div class="top-sub">Painel de novidades</div>
+      </div>
+    </div>
+    <a href="index.html" class="view-btn">Ver site →</a>
+  </div>
+
+  <div class="container">
+
+    <div class="form-card">
+      <div class="form-title"><span>✦</span> Nova novidade</div>
+
+      <div class="field">
+        <label>Emoji</label>
+        <div class="emoji-row" id="emojiRow">
+          <button class="emoji-btn selected" data-emoji="📰">📰</button>
+          <button class="emoji-btn" data-emoji="🏆">🏆</button>
+          <button class="emoji-btn" data-emoji="🃏">🃏</button>
+          <button class="emoji-btn" data-emoji="🍬">🍬</button>
+          <button class="emoji-btn" data-emoji="🎮">🎮</button>
+          <button class="emoji-btn" data-emoji="🔋">🔋</button>
+          <button class="emoji-btn" data-emoji="📦">📦</button>
+          <button class="emoji-btn" data-emoji="⭐">⭐</button>
+          <button class="emoji-btn" data-emoji="🔥">🔥</button>
+          <button class="emoji-btn" data-emoji="🎁">🎁</button>
+          <button class="emoji-btn" data-emoji="💥">💥</button>
+          <button class="emoji-btn" data-emoji="🗞️">🗞️</button>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Etiqueta (ex: Promoção, Novidade)</label>
+        <input type="text" id="tagInput" placeholder="Ex: Em destaque, Promoção" maxlength="30" />
+      </div>
+
+      <div class="field">
+        <label>Título</label>
+        <input type="text" id="titleInput" placeholder="Ex: Álbum da Copa chegou!" maxlength="60" />
+      </div>
+
+      <div class="field">
+        <label>Descrição</label>
+        <textarea id="descInput" placeholder="Conte mais detalhes..."></textarea>
+      </div>
+
+      <div class="field">
+        <label>Link da foto (opcional)</label>
+        <input type="url" id="imgInput" placeholder="Cole aqui o link da imagem..." oninput="previewImg(this.value)" />
+        <p class="img-hint">💡 Como pegar o link da foto:<br>
+          • <strong>Google Fotos:</strong> abra a foto → compartilhar → copiar link<br>
+          • <strong>Instagram:</strong> abra o post → 3 pontinhos → copiar link (use sites como <em>imginn.com</em> para obter o link direto da imagem)<br>
+          • <strong>Qualquer site:</strong> pressione a foto → "copiar endereço da imagem"
+        </p>
+        <div class="img-preview" id="imgPreview">
+          <img id="previewEl" src="" alt="Preview" />
+        </div>
+      </div>
+
+      <button class="save-btn" onclick="addNews()">+ Publicar novidade</button>
+    </div>
+
+    <div class="section-label">✦ Novidades publicadas</div>
+    <div id="newsList"></div>
+
+  </div>
+
+  <div class="toast" id="toast">✓ Novidade publicada!</div>
+
+  <script>
+    let selectedEmoji = '📰';
+
+    document.getElementById('emojiRow').addEventListener('click', e => {
+      const btn = e.target.closest('.emoji-btn');
+      if (!btn) return;
+      document.querySelectorAll('.emoji-btn').forEach(b => b.classList.remove('selected'));
+      btn.classList.add('selected');
+      selectedEmoji = btn.dataset.emoji;
+    });
+
+    function previewImg(url) {
+      const preview = document.getElementById('imgPreview');
+      const img = document.getElementById('previewEl');
+      if (url.trim()) {
+        img.src = url;
+        preview.style.display = 'block';
+        img.onerror = () => { preview.style.display = 'none'; };
+      } else {
+        preview.style.display = 'none';
+      }
+    }
+
+    function getNews() {
+      const stored = localStorage.getItem('banca_news');
+      if (stored) return JSON.parse(stored);
+      return [
+        { emoji: '🏆', tag: 'Em destaque', title: 'Álbum da Copa do Mundo 2026', desc: 'Figurinhas Panini disponíveis! Envelopes avulsos e kits.', img: '' },
+        { emoji: '📰', tag: 'Sempre fresquinho', title: 'Revistas e Jornais do dia', desc: 'As principais publicações do Brasil todos os dias.', img: '' },
+        { emoji: '🍬', tag: 'Bomboniere', title: 'Doces, balas e chocolates', desc: 'Variedade completa de bomboniere.', img: '' }
+      ];
+    }
+
+    function saveNews(news) {
+      localStorage.setItem('banca_news', JSON.stringify(news));
+    }
+
+    function addNews() {
+      const tag = document.getElementById('tagInput').value.trim();
+      const title = document.getElementById('titleInput').value.trim();
+      const desc = document.getElementById('descInput').value.trim();
+      const img = document.getElementById('imgInput').value.trim();
+
+      if (!title) { alert('Digite o título da novidade!'); return; }
+
+      const news = getNews();
+      news.unshift({ emoji: selectedEmoji, tag: tag || 'Novidade', title, desc, img });
+      saveNews(news);
+      renderList();
+      showToast();
+
+      document.getElementById('tagInput').value = '';
+      document.getElementById('titleInput').value = '';
+      document.getElementById('descInput').value = '';
+      document.getElementById('imgInput').value = '';
+      document.getElementById('imgPreview').style.display = 'none';
+    }
+
+    function deleteNews(index) {
+      if (!confirm('Remover essa novidade?')) return;
+      const news = getNews();
+      news.splice(index, 1);
+      saveNews(news); renderList();
+    }
+
+    function moveUp(index) {
+      if (index === 0) return;
+      const news = getNews();
+      [news[index - 1], news[index]] = [news[index], news[index - 1]];
+      saveNews(news); renderList();
+    }
+
+    function moveDown(index) {
+      const news = getNews();
+      if (index === news.length - 1) return;
+      [news[index + 1], news[index]] = [news[index], news[index + 1]];
+      saveNews(news); renderList();
+    }
+
+    function renderList() {
+      const list = document.getElementById('newsList');
+      const news = getNews();
+      if (news.length === 0) {
+        list.innerHTML = '<div class="empty">Nenhuma novidade publicada ainda.</div>';
+        return;
+      }
+      list.innerHTML = news.map((n, i) => `
+        <div class="news-item">
+          ${n.img ? `<img class="news-item-img" src="${n.img}" alt="${n.title}" onerror="this.style.display='none'" />` : ''}
+          <div class="news-item-body">
+            <span class="item-emoji">${n.emoji}</span>
+            <div class="item-info">
+              <div class="item-tag">${n.tag}</div>
+              <div class="item-title">${n.title}</div>
+              ${n.desc ? `<div class="item-desc">${n.desc}</div>` : ''}
+            </div>
+            <div class="item-actions">
+              <button class="up-btn" onclick="moveUp(${i})">↑</button>
+              <button class="down-btn" onclick="moveDown(${i})">↓</button>
+              <button class="del-btn" onclick="deleteNews(${i})">✕</button>
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function showToast() {
+      const t = document.getElementById('toast');
+      t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), 2500);
+    }
+
+    renderList();
+  </script>
+</body>
+</html>
